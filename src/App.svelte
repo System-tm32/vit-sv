@@ -1,24 +1,11 @@
 <script lang="ts">
   import { useMachine } from '@xstate/svelte';
-  import { createMachine } from 'xstate';
   import { fade } from 'svelte/transition';
-
-  const time = new Date();
-
-  const machine = createMachine({
-    id: 'toggle',
-    initial: 'inactive',
-    states: {
-      inactive: {
-        on: { TOGGLE: 'active' }
-      },
-      active: {
-        on: { TOGGLE: 'inactive' }
-      }
-    }
-  });
+  import machine from './state/machine';
 
   const { state, send } = useMachine(machine);
+
+  const time = new Date();
 </script>
 
 <div class="bg">
@@ -42,7 +29,7 @@
         </p>
         <div class="mt-10 flex items-center justify-center gap-x-6">
           <button
-            on:click={() => send('TOGGLE')}
+            on:click={() => send('toggle button state')}
             class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             {$state.value === 'inactive'
