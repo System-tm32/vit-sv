@@ -20,5 +20,9 @@
     "tslib": "^2.5.0",
     "typescript": "^5.0.2",
     "vite": "^4.3.2"
+  },
+  "dependencies": {
+    "@xstate/svelte": "^2.0.1",
+    "xstate": "^4.37.1"
   }
 }
