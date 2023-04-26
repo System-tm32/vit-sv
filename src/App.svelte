@@ -5,10 +5,30 @@
 
   const { state, send } = useMachine(machine);
 
-  const time = new Date();
+  let time = null;
+  let disabledButton = false;
 </script>
 
 <div class="bg">
+  <header>
+    <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+      <div
+        class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl"
+      >
+        <a href="/" class="flex items-center">
+          <img
+            src="https://flowbite.com/docs/images/logo.svg"
+            class="mr-3 h-6 sm:h-9"
+            alt="Flowbite Logo"
+          />
+          <span
+            class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
+            >W-Slide</span
+          >
+        </a>
+      </div>
+    </nav>
+  </header>
   <div class="relative isolate px-6 pt-14 lg:px-8">
     <div
       class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -29,8 +49,12 @@
         </p>
         <div class="mt-10 flex items-center justify-center gap-x-6">
           <button
-            on:click={() => send('toggle button state')}
+            on:click={() => {
+              send('toggle button state');
+              time = new Date();
+            }}
             class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            class:disable={disabledButton}
           >
             {$state.value === 'inactive'
               ? 'Click to activate'
@@ -39,7 +63,23 @@
         </div>
 
         {#if $state.value !== 'inactive'}
-          <p in:fade out:fade>{time}</p>
+          <div
+            in:fade
+            out:fade
+            on:introstart={() => (disabledButton = true)}
+            on:outrostart={() => (disabledButton = true)}
+            on:introend={() => (disabledButton = false)}
+            on:outroend={() => (disabledButton = false)}
+          >
+            <div class="max-w-sm rounded overflow-hidden shadow-lg">
+              <div class="px-6 py-4">
+                <div class="font-bold text-xl mb-2">Time</div>
+                <p class="text-gray-700 text-base">
+                  {time}
+                </p>
+              </div>
+            </div>
+          </div>
         {/if}
       </div>
     </div>
@@ -47,8 +87,7 @@
 </div>
 
 <style>
-  .bg {
-    @apply bg-white;
-    color: red;
+  .disable {
+    @apply bg-gray-500;
   }
 </style>
