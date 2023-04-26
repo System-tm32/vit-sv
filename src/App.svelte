@@ -2,11 +2,17 @@
   import { useMachine } from '@xstate/svelte';
   import { fade } from 'svelte/transition';
   import machine from './state/machine';
+  import Button from './components/buttons/default.svelte';
 
   const { state, send } = useMachine(machine);
 
   let time = null;
   let disabledButton = false;
+
+  const clickButtonHandler = () => {
+    send('toggle button state');
+    time = new Date();
+  };
 </script>
 
 <div class="bg">
@@ -48,18 +54,11 @@
           Welcome to Interactive Slide
         </p>
         <div class="mt-10 flex items-center justify-center gap-x-6">
-          <button
-            on:click={() => {
-              send('toggle button state');
-              time = new Date();
-            }}
-            class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            class:disable={disabledButton}
-          >
+          <Button on:clickButton={clickButtonHandler} disabled={disabledButton}>
             {$state.value === 'inactive'
               ? 'Click to activate'
               : 'Active! Click to deactivate'}
-          </button>
+          </Button>
         </div>
 
         {#if $state.value !== 'inactive'}
@@ -87,7 +86,4 @@
 </div>
 
 <style>
-  .disable {
-    @apply bg-gray-500;
-  }
 </style>
